@@ -259,9 +259,7 @@
 		echo '<ul id="facets" class="list-group">'.PHP_EOL;
 
 		foreach($array_search['facets']['collection']['terms'] as $item) {
-			$data_query['collection'] = $item['term'];
-			$query = http_build_query($data_query, '', '&amp;');
-			echo '<li class="list-group-item"><span class="badge">'.$item['count'].'</span><a href="?'.$query.'">'.$item['term'].'</a></li>';
+			echo '<li class="list-group-item"><span class="badge">'.$item['count'].'</span><a href="?q='.$q.'&amp;collection='.urlencode($item['term']).'">'.$item['term'].'</a></li>';
 		}
 
 		echo '</ul>'.PHP_EOL;

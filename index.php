@@ -139,19 +139,6 @@
 
 		$array_search = json_decode($json, TRUE);
 
-		/*
-
-		echo '<pre>';
-		//print_r($array_search);
-
-		print_r($array_search['facets']['collection']['terms']);
-
-		echo '</pre>';
-
-		exit;
-
-		*/
-
 		$total = $array_search['hits']['total'];
 
 		$data_query = array();
@@ -398,6 +385,10 @@
 
 		$start_pagination = ((ceil($page/6) - 1) * 6) + 1;
 		$end_pagination = $start_pagination + 5;
+
+		if ($end_pagination > $count_pages) {
+			$end_pagination = $count_pages;
+		}
 
 		$query = http_build_query($data_query, '', '&amp;');
 

@@ -302,7 +302,7 @@
 			$end_pagination = $count_pages;
 		}
 
-		$query = 'q='.$q.'&amp;collection='.$collection;
+		$query = 'q='.$q.'&amp;collection='.urlencode($collection);
 
 ?>
 		<div class="text-center">

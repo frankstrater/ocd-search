@@ -51,22 +51,25 @@
 
 	$total = 0;
 	$size = 42;
+	$count_pages = 0;
 	$page = 1;
-	$datefrom = '0000-01-01';
-	$dateto = date('Y-m-d');
 
 	$q = '';
-	$author = '';
 	$collection = '';
-	$yearfrom = '';
-	$yearto = '';
-
-	// Is the search through the extended form and show it after response? Default no.
-
-	$bln_extended = FALSE;
 
 	$media_content_type_terms = array('image/jpeg','image/gif','image/png');
+
 	$array_search = array();
+
+	// We want to know the count per collection, so we use the facets
+
+	$facets = array();
+	$facets['collection'] = array();
+
+	// We are only interested in hits with images, so default filter on media_content_type
+
+	$filters = array();
+	$filters['media_content_type'] = array('terms' => $media_content_type_terms);
 
 	if (isset($_GET['q']) && $_GET['q'] != '') {
 
@@ -74,47 +77,16 @@
 			$q = urldecode($_GET['q']);
 		}
 
+		if (isset($_GET['collection']) && $_GET['collection'] != '') {
+			$collection = urldecode($_GET['collection']);
+			$filters['collection'] = array('terms' => array($collection));
+		}
+
 		if (isset($_GET['page']) && $_GET['page'] != '') {
 			$page = intval($_GET['page']);
 		}
 
 		$offset = ($page - 1) * $size;
-
-		// We are only interested in hits with images, so default filter on media_content_type
-
-		$filters = array();
-		$filters['media_content_type'] = array('terms' => $media_content_type_terms);
-
-		// We want to know the count per collection, so we use the facets
-
-		$facets = array();
-		$facets['collection'] = array();
-
-		if (isset($_GET['collection']) && $_GET['collection'] != '') {
-			$collection = urldecode($_GET['collection']);
-			$filters['collection'] = array('terms' => array($collection));
-			$bln_extended = TRUE;
-		}
-
-		if (isset($_GET['author']) && $_GET['author'] != '') {
-			$author = urldecode($_GET['author']);
-			$filters['author'] = array('terms' => array($author));
-			$bln_extended = TRUE;
-		}
-
-		if (isset($_GET['yearfrom']) && $_GET['yearfrom'] != '') {
-			$yearfrom = $_GET['yearfrom'];
-			$datefrom = $yearfrom.'-01-01';
-			$bln_extended = TRUE;
-		}
-
-		if (isset($_GET['yearto']) && $_GET['yearto'] != '') {
-			$yearto = $_GET['yearto'];
-			$dateto = $yearto.'-12-31';
-			$bln_extended = TRUE;
-		}
-
-		$filters['date'] = array('from' => $datefrom, 'to' => $dateto);
 
 		$data = array(
 			'query' => $q,
@@ -139,27 +111,12 @@
 
 		$array_search = json_decode($json, TRUE);
 
-		$total = $array_search['hits']['total'];
+		//print_r($array_search);exit;
 
-		$data_query = array();
-		$data_query['q'] = $q;
-
-		if ($author != '') {
-			$data_query['author'] = $author;
+		if (isset($array_search['hits']['total'])) {
+			$total = $array_search['hits']['total'];
 		}
-
-		if ($collection != '') {
-			$data_query['collection'] = $collection;
-		}
-
-		if ($yearfrom != '') {
-			$data_query['yearfrom'] = $yearfrom;
-		}
-
-		if ($yearto != '') {
-			$data_query['yearto'] = $yearto;
-		}
-
+		
 		$count_pages = ceil($total/ $size);
 
 	}
@@ -191,8 +148,8 @@
 			background-position: center center;
 			background-size: cover;
 		}
-		#facets, #uitgebreid {
-			max-width: 610px;
+		#facets {
+			max-width: 490px;
 		}
 	</style>
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -215,7 +172,6 @@
 				</button>
 				<a class="navbar-brand" href="#">Open Cultuur Data API</a>
 			</div>
-
 			<div class="collapse navbar-collapse" id="navbar-collapse-1">
 				<form class="navbar-form navbar-left" role="search" method="get">
 					<div class="form-group">
@@ -223,9 +179,6 @@
 					</div>
 					<button type="submit" class="btn btn-default">Zoeken</button>
 				</form>
-				<ul class="nav navbar-nav">
-					<li><a href="#" data-toggle="collapse" data-target="#uitgebreid">Uitgebreid</a></li>
-				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="http://www.opencultuurdata.nl/">Home</a></li>
 					<li><a href="http://www.opencultuurdata.nl/harvest/">Harvest</a></li>
@@ -238,15 +191,22 @@
 	<div class="container">
 
 <?php
-	
-	// Facets collection
 
-	if ($collection == '') {
+	if ($count_pages > 0) {
+	
+		// Facets collection
 
 		echo '<ul id="facets" class="list-group">'.PHP_EOL;
 
 		foreach($array_search['facets']['collection']['terms'] as $item) {
-			echo '<li class="list-group-item"><span class="badge">'.$item['count'].'</span><a href="?q='.$q.'&amp;collection='.urlencode($item['term']).'">'.$item['term'].'</a></li>';
+			echo '<li class="list-group-item">';
+			echo '<span class="badge">'.$item['count'].'</span>';
+			echo '<a href="?q='.$q.'&amp;collection='.urlencode($item['term']).'">'.$item['term'].'</a>';
+			echo '</li>'.PHP_EOL;
+		}
+
+		if ($collection != '') {
+			echo '<li class="list-group-item"><a href="?q='.$q.'">Alle collecties</a>'.PHP_EOL;
 		}
 
 		echo '</ul>'.PHP_EOL;
@@ -254,56 +214,10 @@
 	}
 
 ?>
-
-		<div id="uitgebreid" class="collapse<?= ($bln_extended) ? ' in' : '' ?>">
-
-			<form class="form-horizontal" role="form" method="get">
-
-				<div class="form-group">
-					<label for="qm" class="col-sm-2 control-label">Zoekterm</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" id="qm" name="q" value="<?= $q ?>">
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="author" class="col-sm-2 control-label">Auteur</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" id="author" name="author" value="<?= $author ?>">
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="collection" class="col-sm-2 control-label">Collectie</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control" id="collection" name="collection" value="<?= $collection ?>">
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="yearfrom" class="col-sm-2 control-label">Jaar</label>
-					<div class="col-sm-10">
-						<input type="number" class="form-control" id="yearfrom" name="yearfrom" value="<?= $yearfrom ?>" style="width:180px">
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="yearto" class="col-sm-2 control-label">t/m</label>
-					<div class="col-sm-10">
-						<input type="number" class="form-control" id="yearto" name="yearto" value="<?= $yearto ?>" style="width:180px">
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default">Zoeken</button>
-					</div>
-				</div>
-
-			</form>
-
-		</div>
-
 		<div class="row"> 
-
 <?php
 
-	if (count($array_search) > 0) {
+	if ($count_pages > 0) {
 
 		foreach ($array_search['hits']['hits'] as $item) {
 
@@ -315,7 +229,7 @@
 			
 			$item_title = '';
 			$item_author = '';
-			$item_date = '';
+			$item_year = '';
 
 			if (isset($item['_source']['title'])) {
 				$item_title = $item['_source']['title'];
@@ -326,7 +240,7 @@
 			}
 
 			if (isset($item['_source']['date'])) {
-				$item_date = substr($item['_source']['date'],0,4);
+				$item_year = substr($item['_source']['date'],0,4);
 			}
 
 ?>
@@ -365,7 +279,7 @@
 					<a href="<?= $item_html_url ?>" class="thumb-image" style="background-image: url('<?= $img_url ?>')"></a>
 					<div class="caption">
 						<h4><?= character_limiter($item_title,100) ?></h4>
-						<p><?= $item_author ?>, <?= $item_date ?></p>
+						<p><?= $item_author ?> <?= $item_year ?></p>
 						<p><?= $item_collection ?></p>
 						<hr>
 						<p><small><a href="<?= $item_ocd_url ?>"><?= $item_ocd_id ?></a></small></p>
@@ -376,9 +290,7 @@
 		}	
 	}
 ?>
-
 		</div>
-
 <?php
 
 	if ($count_pages > 1) {
@@ -390,7 +302,7 @@
 			$end_pagination = $count_pages;
 		}
 
-		$query = http_build_query($data_query, '', '&amp;');
+		$query = 'q='.$q.'&amp;collection='.$collection;
 
 ?>
 		<div class="text-center">
@@ -398,7 +310,7 @@
 				<li<?= ($start_pagination == 1) ? ' class="disabled"' : '' ?>><a href="?<?= $query ?>&amp;page=<?= $start_pagination-1 ?>">&laquo;</a></li>
 <?php
 
-	for ($i=$start_pagination;$i<=$end_pagination;$i++) {
+	for ($i = $start_pagination; $i <= $end_pagination; $i++) {
 
 		$request_uri = '?'.$query.'&amp;page='.$i;
 
@@ -418,7 +330,6 @@
 <?php	
 	}
 ?>
-
 		<p class="text-muted text-center">Design &amp; Development by Frank Sträter for Opencultuurdata.nl</p>
 		
 	</div>

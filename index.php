@@ -47,10 +47,10 @@
 
 	}
 
-	// Default values, default size 42 because... well, it's the answer to everything
+	// Default values
 
 	$total = 0;
-	$size = 42;
+	$size = 12;
 	$count_pages = 0;
 	$page = 1;
 
@@ -104,7 +104,8 @@
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 			'Content-Type: application/json',
-			'Content-Length: ' . strlen($data_string))
+			'Content-Length: '.strlen($data_string),
+			'X-Requested-With: XMLHttpRequest')
 		);
 		 
 		$json = curl_exec($ch);
@@ -126,9 +127,9 @@
 <html lang="nl">
 <head>
 	<meta charset="utf-8">
-	<title>Open Cultuur Data API</title>
+	<title>Open Cultuur Data API Search</title>
 	<meta name="author" content="Frank Sträter">
-	<meta name="description" content="Open Cultuur Data API Images Search">
+	<meta name="description" content="Open Cultuur Data API Search">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- We need to include the CSS instead of using CSS through CDN for IE8 support -->

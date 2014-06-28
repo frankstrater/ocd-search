@@ -129,7 +129,7 @@
 			max-width: 490px;
 		}
 		.caption h4 {
-			max-height: 40px;
+			max-height: 42px;
 			overflow: hidden;
 		}
 	</style>
@@ -263,7 +263,7 @@
 					<div class="caption">
 						<h4><?= $item_title ?></h4>
 						<p><?= $item_author ?> <?= $item_year ?></p>
-						<p><?= $item_collection ?></p>
+						<p><a href="<?= $item_html_url ?>"><?= $item_collection ?></a></p>
 						<hr>
 						<p><small><a href="<?= $item_ocd_url ?>"><?= $item_ocd_id ?></a></small></p>
 					</div>

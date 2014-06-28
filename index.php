@@ -2,30 +2,6 @@
 
 	header('Content-Type: text/html; charset=utf-8');
 
-	// Function to limit long titles
-	
-	function character_limiter($str, $n = 500, $end_char = '&#8230;') {
-		if (strlen($str) < $n) {
-			return $str;
-		}
-
-		$str = preg_replace("/\s+/", ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
-
-		if (strlen($str) <= $n) {
-			return $str;
-		}
-
-		$out = "";
-		foreach (explode(' ', trim($str)) as $val) {
-			$out .= $val.' ';
-
-			if (strlen($out) >= $n) {
-				$out = trim($out);
-				return (strlen($out) == strlen($str)) ? $out : $out.$end_char;
-			}
-		}
-	}
-
 	// Function to get redirect location of the OpenCultuurData Resolver URLs
 	// We use this as a temporary solution to get smaller sized images from Rijksmuseum
 
@@ -140,7 +116,7 @@
 			padding-bottom: 70px;
 		}
 		.thumbnail {
-			min-height: 650px;
+			min-height: 620px;
 		}
 		.thumb-image {
 			display: block;
@@ -151,6 +127,10 @@
 		}
 		#facets {
 			max-width: 490px;
+		}
+		.caption h4 {
+			max-height: 40px;
+			overflow: hidden;
 		}
 	</style>
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -227,6 +207,8 @@
 			$item_collection = $item['_source']['meta']['collection'];
 			$item_html_url = $item['_source']['meta']['original_object_urls']['html'];
 			$item_ocd_url =  $item['_source']['meta']['ocd_url'];
+
+			$item_media_url_original = $item['_source']['media_urls'][0]['url'];
 			
 			$item_title = '';
 			$item_author = '';
@@ -277,9 +259,9 @@
 						}
 						
 					?>
-					<a href="<?= $item_html_url ?>" class="thumb-image" style="background-image: url('<?= $img_url ?>')"></a>
+					<a href="<?= $item_media_url_original ?>" class="thumb-image" style="background-image: url('<?= $img_url ?>')"></a>
 					<div class="caption">
-						<h4><?= character_limiter($item_title,100) ?></h4>
+						<h4><?= $item_title ?></h4>
 						<p><?= $item_author ?> <?= $item_year ?></p>
 						<p><?= $item_collection ?></p>
 						<hr>

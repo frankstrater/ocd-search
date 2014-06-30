@@ -33,7 +33,7 @@
 	$q = '';
 	$collection = '';
 
-	$media_content_type_terms = array('image/jpeg','image/gif','image/png');
+	$media_content_type_terms = array('image/jpeg','image/jpg','image/gif','image/png');
 
 	$array_search = array();
 
@@ -205,7 +205,7 @@
 			$item_ocd_id = $item['_id'];
 			$item_media_urls = $item['_source']['media_urls'];
 			$item_collection = $item['_source']['meta']['collection'];
-			$item_html_url = $item['_source']['meta']['original_object_urls']['html'];
+			$item_html_url = reset($item['_source']['meta']['original_object_urls']);
 			$item_ocd_url =  $item['_source']['meta']['ocd_url'];
 
 			$item_media_url_original = $item['_source']['media_urls'][0]['url'];

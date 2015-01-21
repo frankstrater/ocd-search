@@ -26,7 +26,7 @@
 	// Default values
 
 	$total = 0;
-	$size = 11;
+	$size = 17;
 	$count_pages = 0;
 	$page = 1;
 
@@ -109,9 +109,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//fonts.googleapis.com/css?family=RobotoDraft" rel="stylesheet">
-	<link href="//fonts.googleapis.com/css?family=Noto+Serif" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
 	<style type="text/css">
@@ -119,86 +119,87 @@
 		body {
 			padding-top: 90px;
 			padding-bottom: 50px;
-			background-color: #f9f9f9;
 			text-rendering: optimizelegibility;
-			font-family: 'RobotoDraft', sans-serif;
-			color: #212121;
-		}
-
-		a {
-			color: #ff9800;
 		}
 
 		a:hover,
 		a:focus {
-			color: #ef6c00;
 			text-decoration: none;
 		}
 
+		.badge {
+			border-radius: 2px;
+		}
+
 		.panel,
-		.thumbnail {
+		.item {
+			display: inline-block;
+			width: 100%;
 			padding: 0;
-			background-clip: padding-box;
+		    margin: 0 0 16px 0;
 			background-color: #fff;
 			border-radius: 2px;
 			box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
 		}
 
-		.thumb-image {
+		.item img {
 			display: block;
-			height: 400px;
-			background-repeat: no-repeat;
-			background-position: center center;
-			background-size: cover;
+		    height: auto;
+		    width: 100%;
+		    max-width: 100%;
 		}
 
-		.thumbnail .caption {
-			padding: 15px;
+		.item .caption {
+			padding: 16px;
 		}
 
-		.thumbnail .caption h4 {
+		.item .caption h4 {
 			padding: 0;
 			margin: 0 0 10px 0;
-			line-height: 1.5;
-			font-family: 'Noto Serif', serif;
-			font-size: 18px;
-			font-weight: 400;
 		}
 
 		.navbar-default {
-			background-color: #def300;
-			border-color: #def300;
 			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
 		}
 
 		.navbar-default .navbar-brand {
 			padding: 4px 12px;
-			color: #212121;
 		}
 
-		.navbar-default .navbar-collapse, 
 		.navbar-default .navbar-form {
 			border-color: #def300;
+			margin-top: 0;
+			margin-bottom: 0;
 		}
 
-		@media (max-width: 768px) {
-
-			.thumb-grid-item:nth-child(2n+1) {
-				clear: left;
+		 /* Small Devices, Tablets */
+	    @media only screen and (min-width : 768px) {
+	    	.masonry {
+			    -moz-column-count: 2;
+			    -webkit-column-count: 2;
+			    column-count: 2;
+			    -moz-column-gap: 16px;
+			    -webkit-column-gap: 16px;
+			    column-gap: 16px;
 			}
 
-		}
-
-		@media (min-width: 769px) {
-			.panel {
-				min-height: 546px;
+			.navbar-default .navbar-form {
+				margin-top: 8px;
+				margin-bottom: 8px;
 			}
+	    }
 
-			.thumb-grid-item:nth-child(3n+1) {
-				clear: left;
+		/* Medium Devices, Desktops */
+	    @media only screen and (min-width : 992px) {
+	    	.masonry {
+			    -moz-column-count: 3;
+			    -webkit-column-count: 3;
+			    column-count: 3;
+			    -moz-column-gap: 16px;
+			    -webkit-column-gap: 16px;
+			    column-gap: 16px;
 			}
-
-		}
+	    }
 
 	</style>
 </head>
@@ -213,7 +214,7 @@
 			<form class="navbar-form" role="search" method="get">
 				<div class="form-group">
 					<div class="input-group">
-						<input type="text" name="q" value="" class="form-control">
+						<input type="text" name="q" value="<?= $q ?>" class="form-control">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="submit"><span class="fa fa-search"></span></button>
 						</span>
@@ -225,8 +226,8 @@
 
 	<div class="container">
 
-		<div class="row">
-			<div class="col-sm-6 col-md-4 thumb-grid-item">
+		<div class="masonry">
+			
 <?php
 
 	if ($count_pages > 0) {
@@ -244,7 +245,7 @@
 		}
 
 		if ($collection != '') {
-			echo '<li class="list-group-item"><a href="?q='.$q.'">Alle collecties</a>'.PHP_EOL;
+			echo '<li class="list-group-item"><a href="?q='.$q.'"><span class="fa fa-long-arrow-left"></span> Alle collecties</a>'.PHP_EOL;
 		}
 
 ?>
@@ -255,7 +256,7 @@
 	}
 
 ?>
-			</div>
+			
 <?php
 
 	if ($count_pages > 0) {
@@ -288,8 +289,8 @@
 
 ?>
 
-			<div class="col-sm-6 col-md-4 thumb-grid-item">
-				<div class="thumbnail">
+			
+				<div class="item">
 					<?php
 
 						foreach ($item_media_urls as $media_item) {
@@ -321,16 +322,16 @@
 						
 					?>
 
-					<a href="<?= $media_item['url'] ?>" class="thumb-image" style="background-image: url('<?= $img_url ?>')"></a>
+					<img src="<?= $img_url ?>">
 					<div class="caption">
 						<h4><?= $item_title ?></h4>
 						<?= $item_author ?> <?= $item_year ?>
 						<hr>
-						<a href="<?= $item_html_url ?>"><?= strtoupper($item_collection) ?></a>
+						<a href="<?= $item_html_url ?>">BEKIJK BRON</a>
 					</div>
 
 				</div>
-			</div>
+			
 <?php
 		}	
 	}
@@ -377,9 +378,6 @@
 ?>
 		
 	</div>
-
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-	<script type="text/javascript" src="assets/js/materialize.min.js"></script>
 
 </body>
 </html>

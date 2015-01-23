@@ -1,4 +1,6 @@
 <?php
+	
+	include('licenses.php');
 
 	header('Content-Type: text/html; charset=utf-8');
 
@@ -88,7 +90,10 @@
 
 		$array_search = json_decode($json, TRUE);
 
-		//print_r($array_search);exit;
+		if (isset($_GET['source']) && $_GET['source'] != '') {
+			header('Content-Type: application/json; charset=utf-8');
+			echo $json;exit;
+		}
 
 		if (isset($array_search['hits']['total'])) {
 			$total = $array_search['hits']['total'];
@@ -103,9 +108,9 @@
 <html lang="nl">
 <head>
 	<meta charset="utf-8">
-	<title>Open Cultuur Data API Search</title>
+	<title>Open Cultuur Data Search</title>
 	<meta name="author" content="Frank Sträter">
-	<meta name="description" content="Open Cultuur Data API Search">
+	<meta name="description" content="Open Cultuur Data Search">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -113,6 +118,14 @@
 	<link href="//fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!--[if lte IE 9]>
+		<style type="text/css">
+			.container {
+				max-width: 600px;
+			}
+		</style>
+	<![endif]-->
 
 	<style type="text/css">
 
@@ -142,7 +155,7 @@
 			box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
 		}
 
-		.item img {
+		.item .thumb-image img {
 			display: block;
 		    height: auto;
 		    width: 100%;
@@ -155,7 +168,21 @@
 
 		.item .caption h4 {
 			padding: 0;
-			margin: 0 0 10px 0;
+			margin: 0 0 8px 0;
+		}
+
+		.item .caption p {
+			padding: 0;
+			margin: 0;
+		}
+
+		.item .thumb-footer {
+			padding: 16px;
+			border-top: 1px solid #eee;
+		}
+
+		.item .thumb-footer a {
+			margin-right: 16px;
 		}
 
 		.navbar-default {
@@ -268,6 +295,7 @@
 			$item_collection = $item['_source']['meta']['collection'];
 			$item_html_url = reset($item['_source']['meta']['original_object_urls']);
 			$item_ocd_url =  $item['_source']['meta']['ocd_url'];
+			$item_rights =  $item['_source']['meta']['rights'];
 
 			$item_media_url_original = $item['_source']['media_urls'][0]['url'];
 			
@@ -280,7 +308,7 @@
 			}
 
 			if (isset($item['_source']['authors'])) {
-				$item_author = $item['_source']['authors'][0];
+				$item_author = join($item['_source']['authors'], '<br>');
 			}
 
 			if (isset($item['_source']['date'])) {
@@ -322,14 +350,22 @@
 						
 					?>
 
-					<img src="<?= $img_url ?>">
-					<div class="caption">
-						<h4><?= $item_title ?></h4>
-						<?= $item_author ?> <?= $item_year ?>
-						<hr>
-						<a href="<?= $item_html_url ?>">BEKIJK BRON</a>
+					<div class="thumb-image">
+						<img src="<?= $img_url ?>">
 					</div>
-
+					<div class="caption">
+						<h4><?= $item_title ?> <small><?= $item_year ?></small></h4>
+						<p><?= $item_author ?></p>
+						
+						<!--
+						<p class="text-muted"><?= $item_rights ?></p>
+						-->
+					</div>
+					<div class="thumb-footer">
+						<a href="<?= $item_html_url ?>">BRON</a>
+						<a href="<?= $item_ocd_url ?>">CODE</a>
+						<p class="text-muted pull-right"><?= $item_collection ?></p>
+					</div>
 				</div>
 			
 <?php

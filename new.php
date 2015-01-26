@@ -108,9 +108,9 @@
 <html lang="nl">
 <head>
 	<meta charset="utf-8">
-	<title>Open Cultuur Data Search</title>
+	<title>Open Cultuur Data</title>
 	<meta name="author" content="Frank Sträter">
-	<meta name="description" content="Open Cultuur Data Search">
+	<meta name="description" content="Open Cultuur Data">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -118,7 +118,7 @@
 	<link href="//fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-
+	<link href="assets/css/screen.css" rel="stylesheet">
 	<!--[if lte IE 9]>
 		<style type="text/css">
 			.container {
@@ -127,108 +127,7 @@
 		</style>
 	<![endif]-->
 
-	<style type="text/css">
 
-		body {
-			padding-top: 90px;
-			padding-bottom: 50px;
-			text-rendering: optimizelegibility;
-		}
-
-		a:hover,
-		a:focus {
-			text-decoration: none;
-		}
-
-		.badge {
-			border-radius: 2px;
-		}
-
-		.panel,
-		.item {
-			display: inline-block;
-			width: 100%;
-			padding: 0;
-		    margin: 0 0 16px 0;
-			background-color: #fff;
-			border-radius: 2px;
-			box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
-		}
-
-		.item .thumb-image img {
-			display: block;
-		    height: auto;
-		    width: 100%;
-		    max-width: 100%;
-		}
-
-		.item .caption {
-			padding: 16px;
-		}
-
-		.item .caption h4 {
-			padding: 0;
-			margin: 0 0 8px 0;
-		}
-
-		.item .caption p {
-			padding: 0;
-			margin: 0;
-		}
-
-		.item .thumb-footer {
-			padding: 16px;
-			border-top: 1px solid #eee;
-		}
-
-		.item .thumb-footer a {
-			margin-right: 16px;
-		}
-
-		.navbar-default {
-			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
-		}
-
-		.navbar-default .navbar-brand {
-			padding: 4px 12px;
-		}
-
-		.navbar-default .navbar-form {
-			border-color: #def300;
-			margin-top: 0;
-			margin-bottom: 0;
-		}
-
-		 /* Small Devices, Tablets */
-	    @media only screen and (min-width : 768px) {
-	    	.masonry {
-			    -moz-column-count: 2;
-			    -webkit-column-count: 2;
-			    column-count: 2;
-			    -moz-column-gap: 16px;
-			    -webkit-column-gap: 16px;
-			    column-gap: 16px;
-			}
-
-			.navbar-default .navbar-form {
-				margin-top: 8px;
-				margin-bottom: 8px;
-			}
-	    }
-
-		/* Medium Devices, Desktops */
-	    @media only screen and (min-width : 992px) {
-	    	.masonry {
-			    -moz-column-count: 3;
-			    -webkit-column-count: 3;
-			    column-count: 3;
-			    -moz-column-gap: 16px;
-			    -webkit-column-gap: 16px;
-			    column-gap: 16px;
-			}
-	    }
-
-	</style>
 </head>
 
 <body>
@@ -356,15 +255,9 @@
 					<div class="caption">
 						<h4><?= $item_title ?> <small><?= $item_year ?></small></h4>
 						<p><?= $item_author ?></p>
-						
-						<!--
-						<p class="text-muted"><?= $item_rights ?></p>
-						-->
 					</div>
 					<div class="thumb-footer">
-						<a href="<?= $item_html_url ?>">BRON</a>
-						<a href="<?= $item_ocd_url ?>">CODE</a>
-						<p class="text-muted pull-right"><?= $item_collection ?></p>
+						<a href="<?= $item_html_url ?>"><?= $item_collection ?></a>
 					</div>
 				</div>
 			

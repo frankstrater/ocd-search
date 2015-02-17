@@ -52,40 +52,68 @@
 	<link href="//fonts.googleapis.com/css?family=RobotoDraft" rel="stylesheet">
 	<link href="//fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-	<link href="assets/css/screen.css" rel="stylesheet">
-	<!--[if lte IE 9]>
-		<style type="text/css">
-			.container {
-				max-width: 600px;
-			}
-		</style>
-	<![endif]-->
+
+	<style type="text/css">
+
+
+		body {
+			color: #212121;
+    font-family: "RobotoDraft","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+		}
+
+		.item {
+		  width: 364px;
+		  margin: 8px;
+		  float: left;
+		
+			background-color: #fff;
+			border-radius: 2px;
+			box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
+		}
+
+		.item .thumb-image img {
+			display: block;
+			height: auto;
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.item .caption {
+			padding: 16px 16px 6px 16px;
+		}
+
+		.item .caption h4 {
+			font-size: 18px;
+
+    font-family: "Noto Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 500;
+    line-height: 1.5;
+
+			padding: 0;
+			margin: 0 0 8px 0;
+		}
+
+		.item .thumb-footer {
+			padding: 16px;
+			border-top: 1px solid #eee;
+			text-transform: uppercase;
+		}
+
+		.item .thumb-footer a {
+			margin-right: 16px;
+		}
+
+	</style>
+	
 </head>
 
 <body>
 
-	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-		<div class="container">
-			<div class="navbar-header hidden-xs">
-				<a class="navbar-brand" href="#">RIJKS MUSEUM</a>
-			</div>
-			<form class="navbar-form" role="search" method="get">
-				<div class="form-group">
-					<div class="input-group">
-						<input type="text" name="q" value="<?= $q ?>" class="form-control">
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="submit"><span class="fa fa-search"></span></button>
-						</span>
-					</div>
-				</div>
-			</form>
-		</div>
-	</nav>
 
 	<div class="container">
 
-		<div class="masonry">
 			
 <?php
 
@@ -110,49 +138,26 @@
 <?php
 		}	
 ?>
-		</div>
 
-<?php
-
-	if ($count_pages > 1) {
-
-		$start_pagination = ((ceil($p/6) - 1) * 6) + 1;
-		$end_pagination = $start_pagination + 5;
-
-		if ($end_pagination > $count_pages) {
-			$end_pagination = $count_pages;
-		}
-
-		$query = 'q='.urlencode($q);
-
-?>
-		<div class="text-center">
-			<ul class="pagination">
-				<li<?= ($start_pagination == 1) ? ' class="disabled"' : '' ?>><a href="?<?= $query ?>&amp;p=<?= $start_pagination-1 ?>">&laquo;</a></li>
-<?php
-
-	for ($i = $start_pagination; $i <= $end_pagination; $i++) {
-
-		$request_uri = '?'.$query.'&amp;p='.$i;
-
-		if ($p == $i) {
-			$class = ' class="active"';
-		} else {
-			$class = '';
-		}
-	
-		echo '<li'.$class.'><a href="'.$request_uri.'">'.$i.'</a></li>'.PHP_EOL;
-
-	}
-?>
-				<li<?= ($end_pagination == $count_pages) ? ' class="disabled"' : '' ?>><a href="?<?= $query ?>&amp;p=<?= $end_pagination+1 ?>">&raquo;</a></li>
-			</ul>
-		</div>
-<?php	
-	}
-?>
-		
 	</div>
 
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+	<script src="assets/js/jquery.masonry.min.js"></script>
+
+	<script type="text/javascript">
+
+	var $container = $('.container');
+		$container.imagesLoaded(function(){
+		  $container.masonry({
+		    itemSelector : '.item',
+		    columnWidth: function( containerWidth ) {
+			    return containerWidth / 3;
+			  }
+		  });
+		});
+
+
+	</script>
 </body>
 </html>

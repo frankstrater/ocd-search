@@ -15,7 +15,7 @@ a:focus {
 }
 
 .panel,
-.item {
+.card {
 	display: inline-block;
 	width: 100%;
 	padding: 0;
@@ -25,29 +25,29 @@ a:focus {
 	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
 }
 
-.item .thumb-image img {
+.card-image {
 	display: block;
 	height: auto;
 	width: 100%;
 	max-width: 100%;
 }
 
-.item .caption {
+.card-caption {
 	padding: 16px 16px 6px 16px;
 }
 
-.item .caption h4 {
+.card-title {
 	padding: 0;
 	margin: 0 0 8px 0;
 }
 
-.item .thumb-footer {
+.card-footer {
 	padding: 16px;
 	border-top: 1px solid #eee;
 	text-transform: uppercase;
 }
 
-.item .thumb-footer a {
+.card-footer a {
 	margin-right: 16px;
 }
 
@@ -92,4 +92,8 @@ a:focus {
 		-webkit-column-gap: 16px;
 		column-gap: 16px;
 	}
+}
+
+.fancybox-skin {
+	border-radius: 2px;
 }

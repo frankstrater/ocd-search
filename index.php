@@ -124,6 +124,10 @@
 			}
 		</style>
 	<![endif]-->
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<link href="assets/fancybox/jquery.fancybox.css?v=2.1.5" rel="stylesheet">
+	<script src="assets/fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
 </head>
 
 <body>
@@ -189,9 +193,6 @@
 			$item_collection = $item['_source']['meta']['collection'];
 			$item_html_url = reset($item['_source']['meta']['original_object_urls']);
 			$item_ocd_url =  $item['_source']['meta']['ocd_url'];
-			$item_rights =  $item['_source']['meta']['rights'];
-
-			$item_media_url_original = $item['_source']['media_urls'][0]['url'];
 			
 			$item_title = '';
 			$item_author = '';
@@ -211,7 +212,7 @@
 
 ?>
 
-			<div class="item">
+			<div class="card">
 				<?php
 
 					foreach ($item_media_urls as $media_item) {
@@ -242,14 +243,12 @@
 					}
 					
 				?>
-				<div class="thumb-image">
-					<img src="<?= $img_url ?>">
+				<a class="fancybox" data-fancybox-type="iframe" href="view.php?url=<?= $item_ocd_url ?>"><img class="card-image" src="<?= $img_url ?>"></a>
+				<div class="card-caption">
+					<h4 class="card-title"><?= $item_title ?> <small><?= $item_year ?></small></h4>
+					<p class="card-text"><?= $item_author ?></p>
 				</div>
-				<div class="caption">
-					<h4><?= $item_title ?> <small><?= $item_year ?></small></h4>
-					<p><?= $item_author ?></p>
-				</div>
-				<div class="thumb-footer">
+				<div class="card-footer">
 					<a href="<?= $item_html_url ?>"><?= $item_collection ?></a>
 				</div>
 			</div>
@@ -300,6 +299,21 @@
 ?>
 		
 	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".fancybox").fancybox({
+				padding     : 0,
+				fitToView	: false,
+				width		: '95%',
+				height		: '95%',
+				autoSize	: false,
+				closeClick	: false,
+				openEffect	: 'none',
+				closeEffect	: 'none'
+			});
+		});
+	</script>
 
 </body>
 </html>

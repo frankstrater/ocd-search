@@ -1,6 +1,4 @@
 <?php
-	
-	include('licenses.php');
 
 	header('Content-Type: text/html; charset=utf-8');
 
@@ -28,7 +26,7 @@
 	// Default values
 
 	$total = 0;
-	$size = 17;
+	$size = 12;
 	$count_pages = 0;
 	$page = 1;
 
@@ -90,10 +88,7 @@
 
 		$array_search = json_decode($json, TRUE);
 
-		if (isset($_GET['source']) && $_GET['source'] != '') {
-			header('Content-Type: application/json; charset=utf-8');
-			echo $json;exit;
-		}
+		//print_r($array_search);exit;
 
 		if (isset($array_search['hits']['total'])) {
 			$total = $array_search['hits']['total'];
@@ -108,60 +103,81 @@
 <html lang="nl">
 <head>
 	<meta charset="utf-8">
-	<title>Open Cultuur Data</title>
+	<title>Open Cultuur Data API Search</title>
 	<meta name="author" content="Frank Sträter">
-	<meta name="description" content="Open Cultuur Data">
+	<meta name="description" content="Open Cultuur Data API Search">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-	<link href="//fonts.googleapis.com/css?family=RobotoDraft" rel="stylesheet">
-	<link href="//fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-	<link href="assets/css/screen.css" rel="stylesheet">
-	<!--[if lte IE 9]>
-		<style type="text/css">
-			.container {
-				max-width: 600px;
-			}
-		</style>
+	<!-- We need to include the CSS instead of using CSS through CDN for IE8 support -->
+	<link href="bootswatch.css" rel="stylesheet">
+	<style type="text/css">
+		body {
+			padding-top: 70px;
+			padding-bottom: 70px;
+		}
+		.thumbnail {
+			min-height: 620px;
+		}
+		.thumb-image {
+			display: block;
+			height: 400px;
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: cover;
+		}
+		#facets {
+			max-width: 490px;
+		}
+		.caption h4 {
+			max-height: 42px;
+			overflow: hidden;
+		}
+	</style>
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 	<![endif]-->
-
-
 </head>
 
 <body>
 
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container">
-			<div class="navbar-header hidden-xs">
-				<a class="navbar-brand" href="#"><img src="assets/img/logo.png"></a>
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Open Cultuur Data API</a>
 			</div>
-			<form class="navbar-form" role="search" method="get">
-				<div class="form-group">
-					<div class="input-group">
-						<input type="text" name="q" value="<?= $q ?>" class="form-control">
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="submit"><span class="fa fa-search"></span></button>
-						</span>
+			<div class="collapse navbar-collapse" id="navbar-collapse-1">
+				<form class="navbar-form navbar-left" role="search" method="get">
+					<div class="form-group">
+						<input type="text" class="form-control" name="q" value="<?= $q ?>">
 					</div>
-				</div>
-			</form>
+					<button type="submit" class="btn btn-default">Zoeken</button>
+				</form>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="http://www.opencultuurdata.nl/">Home</a></li>
+					<li><a href="http://www.opencultuurdata.nl/harvest/">Harvest</a></li>
+					<li><a href="http://docs.opencultuurdata.nl/">Docs</a></li>
+				</ul>
+			</div>
 		</div>
 	</nav>
 
 	<div class="container">
 
-		<div class="masonry">
-			
 <?php
 
 	if ($count_pages > 0) {
+	
+		// Facets collection
 
-?>
-			<div class="panel panel-default">
-		 		<ul class="list-group">
-<?php
+		echo '<ul id="facets" class="list-group">'.PHP_EOL;
 
 		foreach($array_search['facets']['collection']['terms'] as $item) {
 			echo '<li class="list-group-item">';
@@ -171,18 +187,15 @@
 		}
 
 		if ($collection != '') {
-			echo '<li class="list-group-item"><a href="?q='.$q.'"><span class="fa fa-long-arrow-left"></span> Alle collecties</a>'.PHP_EOL;
+			echo '<li class="list-group-item"><a href="?q='.$q.'">Alle collecties</a>'.PHP_EOL;
 		}
 
-?>
-				</ul>
-			</div>
-<?php
+		echo '</ul>'.PHP_EOL;
 
 	}
 
 ?>
-			
+		<div class="row"> 
 <?php
 
 	if ($count_pages > 0) {
@@ -194,7 +207,6 @@
 			$item_collection = $item['_source']['meta']['collection'];
 			$item_html_url = reset($item['_source']['meta']['original_object_urls']);
 			$item_ocd_url =  $item['_source']['meta']['ocd_url'];
-			$item_rights =  $item['_source']['meta']['rights'];
 
 			$item_media_url_original = $item['_source']['media_urls'][0]['url'];
 			
@@ -207,7 +219,7 @@
 			}
 
 			if (isset($item['_source']['authors'])) {
-				$item_author = join($item['_source']['authors'], '<br>');
+				$item_author = $item['_source']['authors'][0];
 			}
 
 			if (isset($item['_source']['date'])) {
@@ -215,9 +227,8 @@
 			}
 
 ?>
-
-			
-				<div class="item">
+			<div class="col-sm-6 col-md-4">
+				<div class="thumbnail">
 					<?php
 
 						foreach ($item_media_urls as $media_item) {
@@ -248,19 +259,16 @@
 						}
 						
 					?>
-
-					<div class="thumb-image">
-						<img src="<?= $img_url ?>">
-					</div>
+					<a href="<?= $item_media_url_original ?>" class="thumb-image" style="background-image: url('<?= $img_url ?>')"></a>
 					<div class="caption">
-						<h4><?= $item_title ?> <small><?= $item_year ?></small></h4>
-						<p><?= $item_author ?></p>
-					</div>
-					<div class="thumb-footer">
-						<a href="<?= $item_html_url ?>"><?= $item_collection ?></a>
+						<h4><?= $item_title ?></h4>
+						<p><?= $item_author ?> <?= $item_year ?></p>
+						<p><a href="<?= $item_html_url ?>"><?= $item_collection ?></a></p>
+						<hr>
+						<p><small><a href="<?= $item_ocd_url ?>"><?= $item_ocd_id ?></a></small></p>
 					</div>
 				</div>
-			
+			</div>
 <?php
 		}	
 	}
@@ -305,8 +313,12 @@
 <?php	
 	}
 ?>
+		<p class="text-muted text-center">Design &amp; Development by Frank Sträter for Opencultuurdata.nl</p>
 		
 	</div>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 
 </body>
 </html>

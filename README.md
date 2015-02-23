@@ -8,14 +8,6 @@ Demo PHP script of the Open Cultuur Data Restful API. Basic search on _open cult
 
 The documentation of the Open Cultuur API can be found at [docs.opencultuurdata.nl](http://docs.opencultuurdata.nl/).
 
-## Installation
-
-Install index.php and bootswatch.css on a webserver which runs PHP and libcurl.
-
-## Demo
-
-Live version can be viewed at [search.opencultuurdata.nl](http://search.opencultuurdata.nl/).
-
 ## Authors
 
 * OpenCultuurData ([@OpenCultuurData](https://twitter.com/OpenCultuurData))

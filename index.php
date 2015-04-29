@@ -26,7 +26,7 @@
 	// Default values
 
 	$total = 0;
-	$size = 17;
+	$size = 11;
 	$count_pages = 0;
 	$page = 1;
 
@@ -40,7 +40,7 @@
 	// We want to know the count per collection, so we use the facets
 
 	$facets = array();
-	$facets['collection'] = array();
+	$facets['collection'] = new stdClass;
 
 	// We are only interested in hits with images, so default filter on media_content_type
 

@@ -5,6 +5,7 @@
 	$array_object = array();
 
 	$title = '';
+	$authors = '';
 	$description = '';
 	$collection = '';
 	$rights = '';
@@ -21,7 +22,10 @@
 		$item = json_decode($json, TRUE);
 
 		$title = $item['title'];
-		$authors = join($item['authors'],'<br>');
+
+		if (isset($item['authors'])) {
+			$authors = join($item['authors'],'<br>');
+		}
 
 		if (isset($item['description'])) {
 			$description = $item['description'];

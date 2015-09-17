@@ -40,7 +40,7 @@
 	// We want to know the count per collection, so we use the facets
 
 	$facets = array();
-	$facets['collection'] = array();
+	$facets['collection'] = new stdClass;
 
 	// We are only interested in hits with images, so default filter on media_content_type
 
@@ -109,7 +109,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- We need to include the CSS instead of using CSS through CDN for IE8 support -->
-	<link href="bootswatch.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/united/bootstrap.min.css" rel="stylesheet">
+	
 	<style type="text/css">
 		body {
 			padding-top: 70px;

@@ -1,7 +1,7 @@
 /* card.css */
 
 @import url(http://fonts.googleapis.com/css?family=Noto+Sans);
-@import url(http://fonts.googleapis.com/css?family=RobotoDraft);
+@import url(http://fonts.googleapis.com/css?family=Roboto);
 
 body {
 	text-rendering: optimizelegibility;
@@ -37,7 +37,7 @@ body {
 }
 
 .card-text {
-	font-family: 'RobotoDraft', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-size: 14px;
 	color: #212121;
 	padding: 0;
@@ -47,7 +47,7 @@ body {
 .card-footer {
 	border-top: 1px solid #eee;
     padding: 16px;
-    font-family: 'RobotoDraft', sans-serif;
+    font-family: 'Roboto', sans-serif;
 	font-size: 14px;
     text-transform: uppercase;
 }
